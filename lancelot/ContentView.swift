@@ -64,9 +64,7 @@ struct ContentView: View {
                     Spacer()
                 } else {
                     List(filteredApps.indices, id: \.self) { index in
-                        HStack {
-                            Text(filteredApps[index].name)
-                        }
+                        Text(filteredApps[index].name)
                         .padding(.vertical, 4)
                         .listRowBackground(
                             RoundedRectangle(cornerRadius: 6)
