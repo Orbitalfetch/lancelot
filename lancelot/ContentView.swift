@@ -23,7 +23,8 @@ struct BlurryEffect: NSViewRepresentable {
 
 struct ContentView: View {
     @State private var searchText = ""
-    @State private var appList: [String] = []
+    @State private var allApps: [AppModel] = []
+    @State private var filteredApps: [AppModel] = []
 
     var body: some View {
         ZStack {
@@ -34,17 +35,19 @@ struct ContentView: View {
                 TextField("Search for apps...", text: $searchText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
-                    .onChange(of: searchText, perform: { newValue in
-                        filterApps()
-                    })
-
-                if appList.isEmpty {
+                    .onChange(of: searchText) {
+                        filterApps(searchText)
+                    }
+                
+                if filteredApps.isEmpty {
+                    Spacer()
                     Text("No apps found.")
                         .foregroundColor(.secondary)
                         .padding()
+                    Spacer()
                 } else {
-                    List(appList, id: \.self) { app in
-                        Text(app)
+                    List(filteredApps) { app in
+                        Text(app.name)
                     }
                     .scrollContentBackground(.hidden) // Ensures List background is transparent
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -63,27 +66,29 @@ struct ContentView: View {
 
         do {
             let contents = try fileManager.contentsOfDirectory(atPath: applicationsPath)
-            // Filter to include only .app bundles
-            appList = contents.filter { $0.hasSuffix(".app") }
+            allApps = contents
+                .filter { $0.hasSuffix(".app") }
+                .map { appName in
+                    let fullPath = (applicationsPath as NSString).appendingPathComponent(appName)
+                    return AppModel(
+                        name: (appName as NSString).deletingPathExtension,
+                        path: fullPath,
+                        iconPath: ""  // TODO: icon handling
+                    )
+                }
+            filteredApps = allApps
         } catch {
             print("Error loading applications: \(error)")
         }
     }
 
     // Filter applications based on search text
-    private func filterApps() {
-        if searchText.isEmpty {
-            loadApplications()
+    private func filterApps(_ query: String) {
+        if query.isEmpty {
+            filteredApps = allApps
         } else {
-            let applicationsPath = "/Applications"
-            let fileManager = FileManager.default
-
-            do {
-                let contents = try fileManager.contentsOfDirectory(atPath: applicationsPath)
-                // Filter to include only .app bundles that match the search text
-                appList = contents.filter { $0.hasSuffix(".app") && $0.lowercased().contains(searchText.lowercased()) }
-            } catch {
-                print("Error filtering applications: \(error)")
+            filteredApps = allApps.filter {
+                $0.name.lowercased().contains(query.lowercased())
             }
         }
     }
