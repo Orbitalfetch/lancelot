@@ -28,7 +28,7 @@ struct ContentView: View {
     @FocusState private var isSearchFieldFocused: Bool
     
     // Using AppStorage to persist app launch counts
-    @AppStorage("appLaunchCounts") private var appLaunchCountsJSON: String = "{}"
+    @Binding var appLaunchCountsJSON: String
     @State private var appLaunchCounts: [String: Int] = [:]
 
     var body: some View {

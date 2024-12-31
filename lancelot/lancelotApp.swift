@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct lancelotApp: App {
+    @AppStorage("appLaunchCounts") private var appLaunchCountsJSON: String = "{}"
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(appLaunchCountsJSON: $appLaunchCountsJSON)
                 .onAppear {
                     if let window = NSApplication.shared.windows.first {
                         window.titleVisibility = .hidden
