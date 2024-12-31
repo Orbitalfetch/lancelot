@@ -25,6 +25,7 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var allApps: [AppModel] = []
     @State private var filteredApps: [AppModel] = []
+    @State private var selectedIndex = 0
     @FocusState private var isSearchFieldFocused: Bool
 
     var body: some View {
@@ -39,18 +40,12 @@ struct ContentView: View {
                     .focused($isSearchFieldFocused)
                     .onChange(of: searchText) {
                         filterApps(searchText)
+                        selectedIndex = 0
                     }
                     .onSubmit {
-                        // Launch the first app
-                        filterApps(searchText)
-                        let url = NSURL(fileURLWithPath: filteredApps[0].path, isDirectory: true) as URL
-
-                        let path = "/bin"
-                        let configuration = NSWorkspace.OpenConfiguration()
-                        configuration.arguments = [path]
-                        NSWorkspace.shared.openApplication(at: url,
-                                                           configuration: configuration,
-                                                           completionHandler: nil)
+                        if !filteredApps.isEmpty {
+                            launchApp(filteredApps[selectedIndex])
+                        }
                     }
                 
                 if filteredApps.isEmpty {
@@ -65,8 +60,13 @@ struct ContentView: View {
                         .foregroundColor(.primary)
                     Spacer()
                 } else {
-                    List(filteredApps) { app in
-                        Text(app.name)
+                    List(filteredApps.indices, id: \.self) { index in
+                        Text(filteredApps[index].name)
+                            .background(index == selectedIndex ? Color.accentColor.opacity(0.3) : Color.clear)
+                            .onTapGesture {
+                                selectedIndex = index
+                                launchApp(filteredApps[index])
+                            }
                     }
                     .scrollContentBackground(.hidden) // Ensures List background is transparent
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -79,8 +79,30 @@ struct ContentView: View {
             isSearchFieldFocused = true
         }
         .frame(minWidth: 400, minHeight: 400)
+        .onKeyPress(.upArrow) {
+            if selectedIndex > 0 {
+                selectedIndex -= 1
+            }
+            return .handled
+        }
+        .onKeyPress(.downArrow) {
+            if selectedIndex < filteredApps.count - 1 {
+                selectedIndex += 1
+            }
+            return .handled
+        }
     }
-
+    
+    private func launchApp(_ app: AppModel) {
+        let url = NSURL(fileURLWithPath: app.path, isDirectory: true) as URL
+        
+        let path = "/zsh"
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.arguments = [path]
+        NSWorkspace.shared.openApplication(at: url,
+                                           configuration: configuration,
+                                           completionHandler: nil)
+    }
     // Load all applications
     private func loadApplications() {
         let applicationsPath = "/Applications"
