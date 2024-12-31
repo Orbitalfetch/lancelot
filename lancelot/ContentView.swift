@@ -41,9 +41,14 @@ struct ContentView: View {
                 
                 if filteredApps.isEmpty {
                     Spacer()
+                    Image(systemName: "app.dashed")
+                        .foregroundStyle(.secondary)
+                        .font(.system(size: 48))
+                        .padding(.bottom, 8)
                     Text("No apps found.")
-                        .foregroundColor(.secondary)
-                        .padding()
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
                     Spacer()
                 } else {
                     List(filteredApps) { app in
