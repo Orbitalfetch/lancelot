@@ -62,11 +62,16 @@ struct ContentView: View {
                 } else {
                     List(filteredApps.indices, id: \.self) { index in
                         Text(filteredApps[index].name)
-                            .background(index == selectedIndex ? Color.accentColor.opacity(0.3) : Color.clear)
-                            .onTapGesture {
-                                selectedIndex = index
-                                launchApp(filteredApps[index])
-                            }
+                        .padding(.vertical, 4)
+                        .listRowBackground(
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(index == selectedIndex ? Color.accentColor.opacity(0.3) : Color.clear)
+                                .padding(.horizontal, 4)
+                        )
+                        .onTapGesture {
+                            selectedIndex = index
+                            launchApp(filteredApps[index])
+                        }
                     }
                     .scrollContentBackground(.hidden) // Ensures List background is transparent
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
