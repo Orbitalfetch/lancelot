@@ -13,12 +13,11 @@ struct BlurryEffect: NSViewRepresentable {
         let effectView = NSVisualEffectView()
         effectView.state = .active
         effectView.blendingMode = .behindWindow
-        effectView.material = .sidebar  // You can adjust the material
+        effectView.material = .sidebar
         return effectView
     }
 
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
-    }
+    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
 }
 
 struct ContentView: View {
@@ -27,6 +26,10 @@ struct ContentView: View {
     @State private var filteredApps: [AppModel] = []
     @State private var selectedIndex = 0
     @FocusState private var isSearchFieldFocused: Bool
+    
+    // Using AppStorage to persist app launch counts
+    @AppStorage("appLaunchCounts") private var appLaunchCountsJSON: String = "{}"
+    @State private var appLaunchCounts: [String: Int] = [:]
 
     var body: some View {
         ZStack {
@@ -61,7 +64,12 @@ struct ContentView: View {
                     Spacer()
                 } else {
                     List(filteredApps.indices, id: \.self) { index in
-                        Text(filteredApps[index].name)
+                        HStack {
+                            Text(filteredApps[index].name)
+                            Spacer()
+                            Text("Launched \(appLaunchCounts[filteredApps[index].name, default: 0]) times")
+                                .foregroundColor(.secondary)
+                        }
                         .padding(.vertical, 4)
                         .listRowBackground(
                             RoundedRectangle(cornerRadius: 6)
@@ -73,7 +81,7 @@ struct ContentView: View {
                             launchApp(filteredApps[index])
                         }
                     }
-                    .scrollContentBackground(.hidden) // Ensures List background is transparent
+                    .scrollContentBackground(.hidden)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
@@ -81,6 +89,7 @@ struct ContentView: View {
         }
         .onAppear {
             loadApplications()
+            loadLaunchCounts()
             isSearchFieldFocused = true
         }
         .frame(minWidth: 400, minHeight: 400)
@@ -101,6 +110,10 @@ struct ContentView: View {
     private func launchApp(_ app: AppModel) {
         let url = NSURL(fileURLWithPath: app.path, isDirectory: true) as URL
         
+        // Update the launch count for the app
+        appLaunchCounts[app.name, default: 0] += 1
+        saveLaunchCounts()
+
         let path = "/zsh"
         let configuration = NSWorkspace.OpenConfiguration()
         configuration.arguments = [path]
@@ -108,7 +121,7 @@ struct ContentView: View {
                                            configuration: configuration,
                                            completionHandler: nil)
     }
-    // Load all applications
+    
     private func loadApplications() {
         let applicationsPath = "/Applications"
         let fileManager = FileManager.default
@@ -131,7 +144,6 @@ struct ContentView: View {
         }
     }
 
-    // Filter applications based on search text
     private func filterApps(_ query: String) {
         if query.isEmpty {
             filteredApps = allApps
@@ -139,6 +151,22 @@ struct ContentView: View {
             filteredApps = allApps.filter {
                 $0.name.lowercased().contains(query.lowercased())
             }
+        }
+    }
+
+    private func loadLaunchCounts() {
+        if let data = appLaunchCountsJSON.data(using: .utf8),
+           let decodedCounts = try? JSONDecoder().decode([String: Int].self, from: data) {
+            appLaunchCounts = decodedCounts
+        } else {
+            appLaunchCounts = [:]
+        }
+    }
+
+    private func saveLaunchCounts() {
+        if let data = try? JSONEncoder().encode(appLaunchCounts),
+           let jsonString = String(data: data, encoding: .utf8) {
+            appLaunchCountsJSON = jsonString
         }
     }
 }
