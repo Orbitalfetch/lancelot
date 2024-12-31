@@ -66,9 +66,6 @@ struct ContentView: View {
                     List(filteredApps.indices, id: \.self) { index in
                         HStack {
                             Text(filteredApps[index].name)
-                            Spacer()
-                            Text("Launched \(appLaunchCounts[filteredApps[index].name, default: 0]) times")
-                                .foregroundColor(.secondary)
                         }
                         .padding(.vertical, 4)
                         .listRowBackground(
