@@ -25,6 +25,7 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var allApps: [AppModel] = []
     @State private var filteredApps: [AppModel] = []
+    @FocusState private var isSearchFieldFocused: Bool
 
     var body: some View {
         ZStack {
@@ -35,6 +36,7 @@ struct ContentView: View {
                 TextField("Search for apps...", text: $searchText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
+                    .focused($isSearchFieldFocused)
                     .onChange(of: searchText) {
                         filterApps(searchText)
                     }
@@ -60,7 +62,10 @@ struct ContentView: View {
             }
             .padding()
         }
-        .onAppear(perform: loadApplications)
+        .onAppear {
+            loadApplications()
+            isSearchFieldFocused = true
+        }
         .frame(minWidth: 400, minHeight: 400)
     }
 
