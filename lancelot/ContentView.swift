@@ -133,19 +133,11 @@ struct ContentView: View {
                         iconPath: ""  // TODO: icon handling
                     )
                 }
-            filteredApps = allApps
+            filteredApps = allApps.sorted {
+                appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
+            }
         } catch {
             print("Error loading applications: \(error)")
-        }
-    }
-
-    private func filterApps(_ query: String) {
-        if query.isEmpty {
-            filteredApps = allApps
-        } else {
-            filteredApps = allApps.filter {
-                $0.name.lowercased().contains(query.lowercased())
-            }
         }
     }
 
@@ -155,6 +147,25 @@ struct ContentView: View {
             appLaunchCounts = decodedCounts
         } else {
             appLaunchCounts = [:]
+        }
+        // Sort the apps after loading counts
+        filteredApps = allApps.sorted {
+            appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
+        }
+    }
+
+
+    private func filterApps(_ query: String) {
+        if query.isEmpty {
+            filteredApps = allApps.sorted {
+                appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
+            }
+        } else {
+            filteredApps = allApps.filter {
+                $0.name.lowercased().contains(query.lowercased())
+            }.sorted {
+                appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
+            }
         }
     }
 
