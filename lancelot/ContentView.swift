@@ -40,6 +40,18 @@ struct ContentView: View {
                     .onChange(of: searchText) {
                         filterApps(searchText)
                     }
+                    .onSubmit {
+                        // Launch the first app
+                        filterApps(searchText)
+                        let url = NSURL(fileURLWithPath: filteredApps[0].path, isDirectory: true) as URL
+
+                        let path = "/bin"
+                        let configuration = NSWorkspace.OpenConfiguration()
+                        configuration.arguments = [path]
+                        NSWorkspace.shared.openApplication(at: url,
+                                                           configuration: configuration,
+                                                           completionHandler: nil)
+                    }
                 
                 if filteredApps.isEmpty {
                     Spacer()
