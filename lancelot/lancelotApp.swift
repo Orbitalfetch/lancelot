@@ -16,12 +16,12 @@ struct lancelotApp: App {
                     if let window = NSApplication.shared.windows.first {
                         window.titleVisibility = .hidden
                         window.titlebarAppearsTransparent = true
-                        window.styleMask.remove(.titled)
                         window.styleMask.remove(.closable)
                         window.styleMask.remove(.resizable)
                         window.styleMask.remove(.miniaturizable)
                     }
                 }
         }
+        .windowStyle(.hiddenTitleBar)
     }
 }
