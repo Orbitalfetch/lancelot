@@ -11,20 +11,7 @@ import HotKey
 struct ContentView: View {
     let showControl = ShowControl()
     @State private var hotKeyActionTriggered = false
-    private var hotKey = HotKey(key: .d, modifiers: [.command])
-
-    init() {
-        hotKey.keyDownHandler = { [self] in
-            if NSApplication.shared.isHidden {
-                searchText = ""
-                showControl.unhide()
-            }
-            else {
-                showControl.hide()
-            }
-        }
-    }
-    
+    private var hotKey: HotKey
     
     @State private var searchText = ""
     @StateObject private var launchCountsManager = LaunchCountsManager()
@@ -34,7 +21,11 @@ struct ContentView: View {
     @FocusState private var isSearchFieldFocused: Bool
     
     @State private var iconLoader = Iconloader()
-
+    
+    init() {
+        self.hotKey = HotKey(key: .d, modifiers: [.command])
+    }
+    
     var body: some View {
         ZStack {
             BlurryEffect()
@@ -62,8 +53,10 @@ struct ContentView: View {
             .padding(.top, -10)
         }
         .onAppear {
+            setupHotkey()
             loadApplications()
             launchCountsManager.loadLaunchCounts()
+            filterApps(searchText)
             isSearchFieldFocused = true
         }
         .frame(minWidth: 400, minHeight: 400)
@@ -96,6 +89,19 @@ struct ContentView: View {
         showControl.hide()
     }
     
+    private func setupHotkey() {
+        hotKey.keyDownHandler = {
+            if NSApplication.shared.isHidden {
+                searchText = ""
+                loadApplications()
+                filterApps("")
+                showControl.unhide()
+            } else {
+                showControl.hide()
+            }
+        }
+    }
+    
     private func loadApplications() {
         let applicationsPath = "/Applications"
         let fileManager = FileManager.default
@@ -108,9 +114,6 @@ struct ContentView: View {
                     let fullPath = (applicationsPath as NSString).appendingPathComponent(appName)
                     return AppModel(name: (appName as NSString).deletingPathExtension, path: fullPath, iconPath: iconLoader.getIcnsPath(fullPath))
                 }
-            filteredApps = allApps.sorted {
-                launchCountsManager.appLaunchCounts[$0.name, default: 0] > launchCountsManager.appLaunchCounts[$1.name, default: 0]
-            }
         } catch {
             print("Error loading applications: \(error)")
         }
@@ -118,16 +121,17 @@ struct ContentView: View {
 
 
     private func filterApps(_ query: String) {
-        let appLaunchCounts = launchCountsManager.appLaunchCounts
         if query.isEmpty {
             filteredApps = allApps.sorted {
-                appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
+                launchCountsManager.appLaunchCounts[$0.name, default: 0] >
+                launchCountsManager.appLaunchCounts[$1.name, default: 0]
             }
         } else {
             filteredApps = allApps.filter {
                 $0.name.lowercased().contains(query.lowercased())
             }.sorted {
-                appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
+                launchCountsManager.appLaunchCounts[$0.name, default: 0] >
+                launchCountsManager.appLaunchCounts[$1.name, default: 0]
             }
         }
     }
