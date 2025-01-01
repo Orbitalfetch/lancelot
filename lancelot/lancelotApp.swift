@@ -16,7 +16,9 @@ struct lancelotApp: App {
             ContentView()
                 .environmentObject(keybindManager)
                 .onEscape {
-                    showControl.hide()
+                    if !keybindManager.isRecordingKeybind {
+                        showControl.hide()
+                    }
                 }
                 .onAppear {
                     if let window = NSApplication.shared.windows.first {
