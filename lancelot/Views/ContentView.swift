@@ -119,13 +119,11 @@ struct ContentView: View {
         allApps = []
         let fileManager = FileManager.default
         let allPaths: [String] = try! JSONDecoder().decode([String].self, from: savedPaths.data(using: .utf8)!)
-        print(savedPaths)
-        print(allPaths)
         
         for applicationPath in allPaths {
             do {
                 let contents = try fileManager.contentsOfDirectory(atPath: applicationPath)
-                allApps = contents
+                allApps += contents
                     .filter { $0.hasSuffix(".app") }
                     .map { appName in
                         let fullPath = (applicationPath as NSString).appendingPathComponent(appName)
