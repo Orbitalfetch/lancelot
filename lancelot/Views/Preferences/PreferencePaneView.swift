@@ -49,6 +49,18 @@ struct PreferencePaneView: View {
                         Text("Data Management")
                             .font(.headline)
                         
+                        Button(action: {
+                            savedPaths = "[\"/Applications\"]"
+                            loadPaths()
+                        }) {
+                            HStack {
+                                Image(systemName: "questionmark.folder")
+                                Text("Reset Paths")
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.red)
+                        
                         Button(action: clearCounts) {
                             HStack {
                                 Image(systemName: "trash")
