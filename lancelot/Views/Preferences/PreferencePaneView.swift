@@ -12,7 +12,7 @@ struct PreferencePaneView: View {
     @State private var isLaunchAtLoginEnabled = false
     @State private var showAlert = false
     @State private var alertMessage = ""
-    @StateObject private var keybindManager = KeybindManager()
+    @EnvironmentObject var keybindManager: KeybindManager
     @State private var isRecordingKeybind = false
     
     var body: some View {

@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct lancelotApp: App {
+    @StateObject var keybindManager = KeybindManager()
     let showControl = ShowControl()
     var body: some Scene {
         WindowGroup {
@@ -25,10 +26,12 @@ struct lancelotApp: App {
                         window.styleMask.remove(.miniaturizable)
                     }
                 }
+                .environmentObject(keybindManager)
         }
         .windowStyle(.hiddenTitleBar)
         Settings {
             PreferencePaneView()
+                .environmentObject(keybindManager)
         }
         
         /// Menu Bar

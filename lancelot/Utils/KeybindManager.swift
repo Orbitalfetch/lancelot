@@ -32,3 +32,14 @@ class KeybindManager: ObservableObject {
         defaults.set(modifiers.rawValue, forKey: modifiersKey)
     }
 }
+
+extension NSEvent.ModifierFlags {
+    var hotKeyModifiers: NSEvent.ModifierFlags {
+        var modifiers: NSEvent.ModifierFlags = []
+        if contains(.command) { modifiers.insert(.command) }
+        if contains(.option) { modifiers.insert(.option) }
+        if contains(.control) { modifiers.insert(.control) }
+        if contains(.shift) { modifiers.insert(.shift) }
+        return modifiers
+    }
+}

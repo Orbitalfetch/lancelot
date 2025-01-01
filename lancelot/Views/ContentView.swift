@@ -10,8 +10,8 @@ import HotKey
 
 struct ContentView: View {
     let showControl = ShowControl()
-    @State private var hotKeyActionTriggered = false
-    private var hotKey: HotKey
+    @EnvironmentObject var keybindManager: KeybindManager
+    @State private var hotKey: HotKey?
     
     @State private var searchText = ""
     @StateObject private var launchCountsManager = LaunchCountsManager()
@@ -21,10 +21,6 @@ struct ContentView: View {
     @FocusState private var isSearchFieldFocused: Bool
     
     @State private var iconLoader = Iconloader()
-    
-    init() {
-        self.hotKey = HotKey(key: .d, modifiers: [.command])
-    }
     
     var body: some View {
         ZStack {
@@ -52,6 +48,7 @@ struct ContentView: View {
             .padding()
             .padding(.top, -10)
         }
+        .frame(minWidth: 400, minHeight: 400)
         .onAppear {
             showControl.firstPlan()
             setupHotkey()
@@ -60,7 +57,12 @@ struct ContentView: View {
             filterApps(searchText)
             isSearchFieldFocused = true
         }
-        .frame(minWidth: 400, minHeight: 400)
+        .onChange(of: keybindManager.currentKey) {
+            setupHotkey()
+        }
+        .onChange(of: keybindManager.currentModifiers) {
+            setupHotkey()
+        }
         .onKeyPress(.upArrow) {
             if selectedIndex > 0 {
                 selectedIndex -= 1
@@ -91,7 +93,12 @@ struct ContentView: View {
     }
     
     private func setupHotkey() {
-        hotKey.keyDownHandler = {
+        if let existingHotKey = hotKey {
+            existingHotKey.isPaused = true
+        }
+        
+        hotKey = HotKey(key: keybindManager.currentKey, modifiers: keybindManager.currentModifiers.hotKeyModifiers)
+        hotKey?.keyDownHandler = {
             if NSApplication.shared.isHidden {
                 searchText = ""
                 loadApplications()
