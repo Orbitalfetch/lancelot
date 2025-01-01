@@ -20,7 +20,7 @@ struct lancelotApp: App {
         let currentApp = NSRunningApplication.current
         for app in runningApps {
             if app != currentApp {
-                app.terminate()
+                app.forceTerminate()
             }
         }
     }
@@ -48,13 +48,14 @@ struct lancelotApp: App {
             .keyboardShortcut(",")
             Divider()
             Button("Quit") {
-                NSApplication.shared.terminate(nil)
+                appDelegate.internalTerminate()
             }
         }
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
+    var isProgrammaticTermination = false
     let showControl = ShowControl()
     func applicationDidFinishLaunching(_ notification: Notification) {
         if let window = NSApplication.shared.windows.first {
@@ -72,5 +73,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
     func windowDidResignKey(_ notification: Notification) {
         showControl.hide()
+    }
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        if isProgrammaticTermination {
+            return .terminateNow
+        }
+        // nuhuh
+        return .terminateCancel
+    }
+    
+    func internalTerminate() {
+        isProgrammaticTermination = true
+        NSApplication.shared.terminate(nil)
     }
 }
