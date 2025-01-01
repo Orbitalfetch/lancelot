@@ -53,6 +53,7 @@ struct ContentView: View {
             .padding(.top, -10)
         }
         .onAppear {
+            showControl.firstPlan()
             setupHotkey()
             loadApplications()
             launchCountsManager.loadLaunchCounts()
