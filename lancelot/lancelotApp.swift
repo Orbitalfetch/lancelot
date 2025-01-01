@@ -9,11 +9,12 @@ import SwiftUI
 
 @main
 struct lancelotApp: App {
+    let showControl = ShowControl()
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .onEscape {
-                    NSApplication.shared.hide(nil)
+                    showControl.hide()
                 }
                 .onAppear {
                     if let window = NSApplication.shared.windows.first {
@@ -33,7 +34,7 @@ struct lancelotApp: App {
         /// Menu Bar
         MenuBarExtra("Lancelot", systemImage: "figure.fencing") {
             Button("Show Lancelot") {
-                NSApplication.shared.unhide(nil)
+                showControl.unhide()
             }
             .keyboardShortcut("D")
             Divider()

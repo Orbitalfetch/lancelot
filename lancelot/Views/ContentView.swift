@@ -9,6 +9,7 @@ import SwiftUI
 import HotKey
 
 struct ContentView: View {
+    let showControl = ShowControl()
     @State private var hotKeyActionTriggered = false
     private var hotKey = HotKey(key: .d, modifiers: [.command])
 
@@ -16,10 +17,10 @@ struct ContentView: View {
         hotKey.keyDownHandler = { [self] in
             if NSApplication.shared.isHidden {
                 searchText = ""
-                NSApplication.shared.unhide(nil)
+                showControl.unhide()
             }
             else {
-                NSApplication.shared.hide(nil)
+                showControl.hide()
             }
         }
     }
@@ -92,7 +93,7 @@ struct ContentView: View {
         NSWorkspace.shared.openApplication(at: url,
                                            configuration: configuration,
                                            completionHandler: nil)
-        NSApplication.shared.hide(nil)
+        showControl.hide()
     }
     
     private func loadApplications() {
