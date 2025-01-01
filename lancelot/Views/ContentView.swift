@@ -10,7 +10,7 @@ import HotKey
 
 struct ContentView: View {
     @State private var hotKeyActionTriggered = false
-    private var hotKey = HotKey(key: .space, modifiers: [.command])
+    private var hotKey = HotKey(key: .d, modifiers: [.command])
 
     init() {
         hotKey.keyDownHandler = { [self] in

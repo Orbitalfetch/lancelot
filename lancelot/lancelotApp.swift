@@ -12,6 +12,9 @@ struct lancelotApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onEscape {
+                    NSApplication.shared.hide(nil)
+                }
                 .onAppear {
                     if let window = NSApplication.shared.windows.first {
                         window.titleVisibility = .hidden
