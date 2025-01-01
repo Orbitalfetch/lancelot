@@ -12,6 +12,8 @@ struct PreferencePaneView: View {
     @State private var isLaunchAtLoginEnabled = false
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @StateObject private var keybindManager = KeybindManager()
+    @State private var isRecordingKeybind = false
     
     var body: some View {
         TabView {
@@ -23,6 +25,22 @@ struct PreferencePaneView: View {
                         }
                     
                     Divider()
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Keyboard Shortcuts")
+                            .font(.headline)
+                        
+                        HStack {
+                            Text("Toggle app:")
+                            Spacer()
+                            Text(getKeybindString())
+                                .foregroundColor(.secondary)
+                            KeyRecorderView(isRecording: $isRecordingKeybind) { key, modifiers in
+                                keybindManager.saveKeybind(key: key, modifiers: modifiers)
+                            }
+                        }
+                    }
+                    .padding(.vertical, 4)
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Data Management")
@@ -76,5 +94,11 @@ struct PreferencePaneView: View {
         LaunchCountsManager().clear()
         alertMessage = "Launch history has been cleared"
         showAlert = true
+    }
+    
+    private func getKeybindString() -> String {
+        let modifierString = keybindManager.currentModifiers.description
+        let keyString = keybindManager.currentKey.description
+        return "\(modifierString) + \(keyString)"
     }
 }
