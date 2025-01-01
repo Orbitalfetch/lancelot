@@ -10,16 +10,13 @@ import AppKit
 
 struct ContentView: View {
     @State private var searchText = ""
+    @StateObject private var launchCountsManager = LaunchCountsManager()
     @State private var allApps: [AppModel] = []
     @State private var filteredApps: [AppModel] = []
     @State private var selectedIndex = 0
     @FocusState private var isSearchFieldFocused: Bool
     
     @State private var iconLoader = Iconloader()
-    
-    // Using AppStorage to persist app launch counts
-    @Binding var appLaunchCountsJSON: String
-    @State private var appLaunchCounts: [String: Int] = [:]
 
     var body: some View {
         ZStack {
@@ -69,8 +66,7 @@ struct ContentView: View {
         let url = NSURL(fileURLWithPath: app.path, isDirectory: true) as URL
         
         // Update the launch count for the app
-        appLaunchCounts[app.name, default: 0] += 1
-        saveLaunchCounts()
+        launchCountsManager.incrementLaunchCount(for: app.name)
 
         let path = "/zsh"
         let configuration = NSWorkspace.OpenConfiguration()
@@ -93,7 +89,7 @@ struct ContentView: View {
                     return AppModel(name: (appName as NSString).deletingPathExtension, path: fullPath, iconPath: iconLoader.getIcnsPath(fullPath))
                 }
             filteredApps = allApps.sorted {
-                appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
+                launchCountsManager.appLaunchCounts[$0.name, default: 0] > launchCountsManager.appLaunchCounts[$1.name, default: 0]
             }
         } catch {
             print("Error loading applications: \(error)")
@@ -101,20 +97,15 @@ struct ContentView: View {
     }
 
     private func loadLaunchCounts() {
-        if let data = appLaunchCountsJSON.data(using: .utf8),
-           let decodedCounts = try? JSONDecoder().decode([String: Int].self, from: data) {
-            appLaunchCounts = decodedCounts
-        } else {
-            appLaunchCounts = [:]
-        }
-        // Sort the apps after loading counts
+        launchCountsManager.loadLaunchCounts()
         filteredApps = allApps.sorted {
-            appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
+            launchCountsManager.appLaunchCounts[$0.name, default: 0] > launchCountsManager.appLaunchCounts[$1.name, default: 0]
         }
     }
 
 
     private func filterApps(_ query: String) {
+        let appLaunchCounts = launchCountsManager.appLaunchCounts
         if query.isEmpty {
             filteredApps = allApps.sorted {
                 appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
@@ -125,13 +116,6 @@ struct ContentView: View {
             }.sorted {
                 appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
             }
-        }
-    }
-
-    private func saveLaunchCounts() {
-        if let data = try? JSONEncoder().encode(appLaunchCounts),
-           let jsonString = String(data: data, encoding: .utf8) {
-            appLaunchCountsJSON = jsonString
         }
     }
 }
