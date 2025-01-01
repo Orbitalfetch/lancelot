@@ -72,56 +72,61 @@ struct PreferencePaneView: View {
             }
             
             Form {
-                Section(header: Text("Edit Paths").font(.title2)) {
-                    List {
-                        ForEach(paths.indices, id: \.self) { index in
-                            if editingIndex == index {
-                                HStack {
-                                    TextField("Edit Path", text: Binding(
-                                        get: { paths[index] },
-                                        set: { paths[index] = $0 }
-                                    ))
+                Section() {
+                    VStack {
+                        Text("Paths").font(.title)
+                            .frame(maxWidth: .infinity, alignment: .topLeading)
+                        List {
+                            ForEach(paths.indices, id: \.self) { index in
+                                if editingIndex == index {
+                                    HStack {
+                                        TextField("Edit Path", text: Binding(
+                                            get: { paths[index] },
+                                            set: { paths[index] = $0 }
+                                        ))
                                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    
-                                    Button("Save") {
-                                        savePaths()
-                                        editingIndex = nil
+                                        
+                                        Button("Save") {
+                                            savePaths()
+                                            editingIndex = nil
+                                        }
+                                        .buttonStyle(BorderlessButtonStyle())
                                     }
-                                    .buttonStyle(BorderlessButtonStyle())
-                                }
-                            } else {
-                                HStack {
-                                    Text(paths[index])
-                                    Spacer()
-                                    Button("Edit") {
-                                        editingIndex = index
+                                } else {
+                                    HStack {
+                                        Text(paths[index])
+                                        Spacer()
+                                        Button("Edit") {
+                                            editingIndex = index
+                                        }
+                                        .buttonStyle(BorderlessButtonStyle())
+                                        Button("Delete") {
+                                            paths.remove(at: index)
+                                            savePaths()
+                                        }
+                                        .buttonStyle(BorderlessButtonStyle())
+                                        .foregroundColor(.red)
                                     }
-                                    .buttonStyle(BorderlessButtonStyle())
-                                    Button("Delete") {
-                                        paths.remove(at: index)
-                                        savePaths()
-                                    }
-                                    .buttonStyle(BorderlessButtonStyle())
-                                    .foregroundColor(.red)
                                 }
                             }
                         }
-                    }
-                    .listStyle(PlainListStyle())
-                    
-                    HStack {
-                        TextField("Add new path", text: $newPath)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        
-                        Button("Add") {
-                            if !newPath.isEmpty {
-                                paths.append(newPath)
-                                newPath = ""
-                                savePaths()
+                        .listStyle(PlainListStyle())
+                        HStack {
+                            TextField("Add new path", text: $newPath)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .bold()
+                            
+                            Button("Add") {
+                                if !newPath.isEmpty {
+                                    paths.append(newPath)
+                                    newPath = ""
+                                    savePaths()
+                                }
                             }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .disabled(newPath.isEmpty)
+                            .foregroundColor(.accentColor)
                         }
-                        .buttonStyle(BorderlessButtonStyle())
-                        .disabled(newPath.isEmpty)
                     }
                 }
             }
