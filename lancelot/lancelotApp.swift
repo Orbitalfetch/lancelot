@@ -11,10 +11,13 @@ import SwiftUI
 struct lancelotApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var keybindManager = KeybindManager()
+    @AppStorage("savedPaths") private var savedPaths: String = "[\"/Applications\"]"
+
     let showControl = ShowControl()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(savedPaths: $savedPaths)
                 .environmentObject(keybindManager)
                 .onEscape {
                     if !keybindManager.isRecordingKeybind {
@@ -33,7 +36,7 @@ struct lancelotApp: App {
         }
         .windowStyle(.hiddenTitleBar)
         Settings {
-            PreferencePaneView()
+            PreferencePaneView(savedPaths: $savedPaths)
                 .environmentObject(keybindManager)
         }
         

@@ -22,6 +22,8 @@ struct ContentView: View {
     
     @State private var iconLoader = Iconloader()
     
+    @Binding var savedPaths: String
+    
     var body: some View {
         ZStack {
             BlurryEffect()
@@ -114,19 +116,24 @@ struct ContentView: View {
     }
     
     private func loadApplications() {
-        let applicationsPath = "/Applications"
+        allApps = []
         let fileManager = FileManager.default
-
-        do {
-            let contents = try fileManager.contentsOfDirectory(atPath: applicationsPath)
-            allApps = contents
-                .filter { $0.hasSuffix(".app") }
-                .map { appName in
-                    let fullPath = (applicationsPath as NSString).appendingPathComponent(appName)
-                    return AppModel(name: (appName as NSString).deletingPathExtension, path: fullPath, iconPath: iconLoader.getIcnsPath(fullPath))
-                }
-        } catch {
-            print("Error loading applications: \(error)")
+        let allPaths: [String] = try! JSONDecoder().decode([String].self, from: savedPaths.data(using: .utf8)!)
+        print(savedPaths)
+        print(allPaths)
+        
+        for applicationPath in allPaths {
+            do {
+                let contents = try fileManager.contentsOfDirectory(atPath: applicationPath)
+                allApps = contents
+                    .filter { $0.hasSuffix(".app") }
+                    .map { appName in
+                        let fullPath = (applicationPath as NSString).appendingPathComponent(appName)
+                        return AppModel(name: (appName as NSString).deletingPathExtension, path: fullPath, iconPath: iconLoader.getIcnsPath(fullPath))
+                    }
+            } catch {
+                print("Error loading applications: \(error)")
+            }
         }
     }
 

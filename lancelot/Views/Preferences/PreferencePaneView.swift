@@ -13,6 +13,10 @@ struct PreferencePaneView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @EnvironmentObject var keybindManager: KeybindManager
+    @Binding var savedPaths: String
+    @State private var paths: [String] = []
+    @State private var newPath: String = ""
+    @State private var editingIndex: Int? = nil
     
     var body: some View {
         TabView {
@@ -66,6 +70,66 @@ struct PreferencePaneView: View {
             .tabItem {
                 Label("General", systemImage: "gearshape")
             }
+            
+            Form {
+                Section(header: Text("Edit Paths").font(.title2)) {
+                    List {
+                        ForEach(paths.indices, id: \.self) { index in
+                            if editingIndex == index {
+                                HStack {
+                                    TextField("Edit Path", text: Binding(
+                                        get: { paths[index] },
+                                        set: { paths[index] = $0 }
+                                    ))
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    
+                                    Button("Save") {
+                                        savePaths()
+                                        editingIndex = nil
+                                    }
+                                    .buttonStyle(BorderlessButtonStyle())
+                                }
+                            } else {
+                                HStack {
+                                    Text(paths[index])
+                                    Spacer()
+                                    Button("Edit") {
+                                        editingIndex = index
+                                    }
+                                    .buttonStyle(BorderlessButtonStyle())
+                                    Button("Delete") {
+                                        paths.remove(at: index)
+                                        savePaths()
+                                    }
+                                    .buttonStyle(BorderlessButtonStyle())
+                                    .foregroundColor(.red)
+                                }
+                            }
+                        }
+                    }
+                    .listStyle(PlainListStyle())
+                    
+                    HStack {
+                        TextField("Add new path", text: $newPath)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        
+                        Button("Add") {
+                            if !newPath.isEmpty {
+                                paths.append(newPath)
+                                newPath = ""
+                                savePaths()
+                            }
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                        .disabled(newPath.isEmpty)
+                    }
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .tabItem {
+                Label("Paths", systemImage: "folder.badge.gearshape")
+            }
         }
         .frame(width: 500, height: 280)
         .alert("Notice", isPresented: $showAlert) {
@@ -73,6 +137,7 @@ struct PreferencePaneView: View {
         } message: {
             Text(alertMessage)
         }
+        .onAppear(perform: loadPaths)
     }
     
     private func toggleLaunchAtLogin(enabled: Bool) {
@@ -99,5 +164,18 @@ struct PreferencePaneView: View {
         let modifierString = keybindManager.currentModifiers.description
         let keyString = keybindManager.currentKey.description
         return "\(modifierString) + \(keyString)"
+    }
+    
+    private func savePaths() {
+        if let data = try? JSONEncoder().encode(paths) {
+            savedPaths = String(data: data, encoding: .utf8) ?? "[]"
+        }
+    }
+    
+    public func loadPaths() {
+        if let data = savedPaths.data(using: .utf8),
+           let decodedPaths = try? JSONDecoder().decode([String].self, from: data) {
+            paths = decodedPaths
+        }
     }
 }
