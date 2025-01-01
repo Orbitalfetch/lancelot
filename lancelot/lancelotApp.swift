@@ -26,5 +26,8 @@ struct lancelotApp: App {
                 }
         }
         .windowStyle(.hiddenTitleBar)
+        Settings {
+            PreferencePaneView()
+        }
     }
 }
