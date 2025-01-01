@@ -38,7 +38,7 @@ struct ContentView: View {
                     AppsListView(filteredApps: $filteredApps, iconLoader: iconLoader, selectedIndex: $selectedIndex, onAppSelected: { app in
                         launchApp(app)
                     })
-                    .padding(.top, 10)
+                    .padding(.top, 5)
                 }
             }
             .padding()

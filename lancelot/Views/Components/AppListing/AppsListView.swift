@@ -14,29 +14,37 @@ struct AppsListView: View {
     let onAppSelected: (AppModel) -> Void
     
     var body: some View {
-        List(filteredApps.indices, id: \.self) { index in
-            HStack {
-                IconView(imgPath: filteredApps[index].iconPath)
-                Text(filteredApps[index].name)
-                Text(filteredApps[index].path)
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.trailing)
+        ScrollViewReader { proxy in
+            List(filteredApps.indices, id: \.self) { index in
+                HStack {
+                    IconView(imgPath: filteredApps[index].iconPath)
+                    Text(filteredApps[index].name)
+                    Text(filteredApps[index].path)
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.trailing)
+                }
+                .padding(.vertical, 4)
+                .listRowBackground(
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(index == selectedIndex ? Color.accentColor.opacity(0.3) : Color.clear)
+                        .padding(.horizontal, 4)
+                )
+                .onTapGesture {
+                    selectedIndex = index
+                    onAppSelected(filteredApps[index])
+                }
+                .id(index)
             }
-            .padding(.vertical, 4)
-            .listRowBackground(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(index == selectedIndex ? Color.accentColor.opacity(0.3) : Color.clear)
-                    .padding(.horizontal, 4)
-            )
-            .onTapGesture {
-                selectedIndex = index
-                onAppSelected(filteredApps[index])
+            .scrollContentBackground(.hidden)
+            .scrollIndicators(.never)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.horizontal)
+            .onChange(of: selectedIndex) {
+                withAnimation {
+                    proxy.scrollTo(selectedIndex, anchor: .center)
+                }
             }
         }
-        .scrollContentBackground(.hidden)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .scrollIndicators(.never) // never bc if u connect a mouse it comes back
-        .padding(.horizontal)
     }
 }
