@@ -14,6 +14,7 @@ struct lancelotApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(keybindManager)
                 .onEscape {
                     showControl.hide()
                 }
@@ -21,12 +22,11 @@ struct lancelotApp: App {
                     if let window = NSApplication.shared.windows.first {
                         window.titleVisibility = .hidden
                         window.titlebarAppearsTransparent = true
-                        window.styleMask.remove(.closable)
-                        window.styleMask.remove(.resizable)
-                        window.styleMask.remove(.miniaturizable)
+                        window.standardWindowButton(.closeButton)?.isHidden = true
+                        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+                        window.standardWindowButton(.zoomButton)?.isHidden = true
                     }
                 }
-                .environmentObject(keybindManager)
         }
         .windowStyle(.hiddenTitleBar)
         Settings {
