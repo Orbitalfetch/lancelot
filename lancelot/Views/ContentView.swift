@@ -27,6 +27,8 @@ struct ContentView: View {
     @State private var selectedIndex = 0
     @FocusState private var isSearchFieldFocused: Bool
     
+    @State private var iconLoader = Iconloader()
+    
     // Using AppStorage to persist app launch counts
     @Binding var appLaunchCountsJSON: String
     @State private var appLaunchCounts: [String: Int] = [:]
@@ -64,7 +66,10 @@ struct ContentView: View {
                     Spacer()
                 } else {
                     List(filteredApps.indices, id: \.self) { index in
-                        Text(filteredApps[index].name)
+                        HStack {
+                            IconView(imgPath: filteredApps[index].iconPath)
+                            Text(filteredApps[index].name)
+                        }
                         .padding(.vertical, 4)
                         .listRowBackground(
                             RoundedRectangle(cornerRadius: 6)
@@ -127,11 +132,7 @@ struct ContentView: View {
                 .filter { $0.hasSuffix(".app") }
                 .map { appName in
                     let fullPath = (applicationsPath as NSString).appendingPathComponent(appName)
-                    return AppModel(
-                        name: (appName as NSString).deletingPathExtension,
-                        path: fullPath,
-                        iconPath: ""  // TODO: icon handling
-                    )
+                    return AppModel(name: (appName as NSString).deletingPathExtension, path: fullPath, iconPath: iconLoader.getIcnsPath(fullPath))
                 }
             filteredApps = allApps.sorted {
                 appLaunchCounts[$0.name, default: 0] > appLaunchCounts[$1.name, default: 0]
