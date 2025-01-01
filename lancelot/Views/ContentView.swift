@@ -80,6 +80,17 @@ struct ContentView: View {
             }
             return .handled
         }
+        .onKeyPress(.escape) {
+            if !keybindManager.isRecordingKeybind {
+                if searchText.isEmpty {
+                    showControl.hide()
+                }
+                else {
+                    searchText = ""
+                }
+            }
+            return .handled
+        }
     }
     
     private func launchApp(_ app: AppModel) {
