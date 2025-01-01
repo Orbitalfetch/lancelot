@@ -43,8 +43,8 @@ struct lancelotApp: App {
             }
             .keyboardShortcut("D")
             Divider()
-            Button("Settings") {
-                print("show settings")
+            SettingsLink {
+                Text("Settings")
             }
             .keyboardShortcut(",")
             Divider()
