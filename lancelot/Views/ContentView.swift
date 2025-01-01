@@ -50,7 +50,7 @@ struct ContentView: View {
             .padding()
             .padding(.top, -10)
         }
-        .frame(minWidth: 400, minHeight: 400)
+        .frame(minWidth: 500, minHeight: 140)
         .onAppear {
             showControl.firstPlan()
             setupHotkey()
