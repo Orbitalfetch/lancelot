@@ -35,4 +35,8 @@ class LaunchCountsManager: ObservableObject {
         appLaunchCounts[appName, default: 0] += 1
         saveLaunchCounts()
     }
+    
+    func clear() {
+        appLaunchCountsJSON = "{}"
+    }
 }
