@@ -76,6 +76,7 @@ struct ContentView: View {
         NSWorkspace.shared.openApplication(at: url,
                                            configuration: configuration,
                                            completionHandler: nil)
+        NSApplication.shared.hide(nil)
     }
     
     private func loadApplications() {
