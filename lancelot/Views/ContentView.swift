@@ -63,6 +63,9 @@ struct ContentView: View {
         .onChange(of: keybindManager.currentModifiers) {
             setupHotkey()
         }
+        .onChange(of: keybindManager.isRecordingKeybind) {
+            hotKey?.isPaused = keybindManager.isRecordingKeybind
+        }
         .onKeyPress(.upArrow) {
             if selectedIndex > 0 {
                 selectedIndex -= 1

@@ -13,7 +13,6 @@ struct PreferencePaneView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @EnvironmentObject var keybindManager: KeybindManager
-    @State private var isRecordingKeybind = false
     
     var body: some View {
         TabView {
@@ -35,7 +34,7 @@ struct PreferencePaneView: View {
                             Spacer()
                             Text(getKeybindString())
                                 .foregroundColor(.secondary)
-                            KeyRecorderView(isRecording: $isRecordingKeybind) { key, modifiers in
+                            KeyRecorderView(isRecording: $keybindManager.isRecordingKeybind) { key, modifiers in
                                 keybindManager.saveKeybind(key: key, modifiers: modifiers)
                             }
                         }

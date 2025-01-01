@@ -12,6 +12,7 @@ import AppKit
 class KeybindManager: ObservableObject {
     @Published var currentKey: Key = .d
     @Published var currentModifiers: NSEvent.ModifierFlags = [.command]
+    @Published var isRecordingKeybind = false
     
     private let defaults = UserDefaults.standard
     private let keyKey = "userHotkey.keyCode"
