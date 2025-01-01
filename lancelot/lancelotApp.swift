@@ -66,4 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         ShowControl().hide()
         return false
     }
+    func windowDidResignKey(_ notification: Notification) {
+        ShowControl().hide()
+    }
 }
