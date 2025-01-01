@@ -15,15 +15,18 @@ struct lancelotApp: App {
 
     let showControl = ShowControl()
 
+    init() {
+        let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: "tech.orbitalfetch.lancelot")
+        let currentApp = NSRunningApplication.current
+        for app in runningApps {
+            if app != currentApp {
+                app.terminate()
+            }
+        }
+    }
     var body: some Scene {
         WindowGroup {
             ContentView(savedPaths: $savedPaths)
-                .onKeyPress(.escape) {
-                    if !keybindManager.isRecordingKeybind {
-                        showControl.hide()
-                    }
-                    return .handled
-                }
                 .environmentObject(keybindManager)
         }
         .windowStyle(.hiddenTitleBar)
