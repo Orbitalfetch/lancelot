@@ -52,6 +52,7 @@ struct lancelotApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
+    let showControl = ShowControl()
     func applicationDidFinishLaunching(_ notification: Notification) {
         if let window = NSApplication.shared.windows.first {
             window.titleVisibility = .hidden
@@ -63,10 +64,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
     }
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        ShowControl().hide()
+        showControl.hide()
         return false
     }
     func windowDidResignKey(_ notification: Notification) {
-        ShowControl().hide()
+        showControl.hide()
     }
 }
