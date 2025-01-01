@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7964FB5C2D24F008003FA8C9 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 7964FB5B2D24F008003FA8C9 /* HotKey */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		D72E22BA2D2435A60025D735 /* lancelot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lancelot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7964FB5C2D24F008003FA8C9 /* HotKey in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = lancelot;
 			packageProductDependencies = (
+				7964FB5B2D24F008003FA8C9 /* HotKey */,
 			);
 			productName = lancelot;
 			productReference = D72E22BA2D2435A60025D735 /* lancelot.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = D72E22B12D2435A60025D735;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7964FB5A2D24F008003FA8C9 /* XCRemoteSwiftPackageReference "HotKey" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D72E22BB2D2435A60025D735 /* Products */;
 			projectDirPath = "";
@@ -321,6 +330,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7964FB5A2D24F008003FA8C9 /* XCRemoteSwiftPackageReference "HotKey" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/soffes/HotKey";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7964FB5B2D24F008003FA8C9 /* HotKey */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7964FB5A2D24F008003FA8C9 /* XCRemoteSwiftPackageReference "HotKey" */;
+			productName = HotKey;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D72E22B22D2435A60025D735 /* Project object */;
 }

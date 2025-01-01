@@ -6,9 +6,25 @@
 //
 
 import SwiftUI
-import AppKit
+import HotKey
 
 struct ContentView: View {
+    @State private var hotKeyActionTriggered = false
+    private var hotKey = HotKey(key: .space, modifiers: [.command])
+
+    init() {
+        hotKey.keyDownHandler = { [self] in
+            if NSApplication.shared.isHidden {
+                searchText = ""
+                NSApplication.shared.unhide(nil)
+            }
+            else {
+                NSApplication.shared.hide(nil)
+            }
+        }
+    }
+    
+    
     @State private var searchText = ""
     @StateObject private var launchCountsManager = LaunchCountsManager()
     @State private var allApps: [AppModel] = []
