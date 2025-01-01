@@ -19,15 +19,6 @@ struct lancelotApp: App {
         WindowGroup {
             ContentView(savedPaths: $savedPaths)
                 .environmentObject(keybindManager)
-                .onAppear {
-                    if let window = NSApplication.shared.windows.first {
-                        window.titleVisibility = .hidden
-                        window.titlebarAppearsTransparent = true
-                        window.standardWindowButton(.closeButton)?.isHidden = true
-                        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
-                        window.standardWindowButton(.zoomButton)?.isHidden = true
-                    }
-                }
         }
         .windowStyle(.hiddenTitleBar)
         Settings {
@@ -54,16 +45,17 @@ struct lancelotApp: App {
     }
 }
 
-// MARK: The only way I found..
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         if let window = NSApplication.shared.windows.first {
+            window.titleVisibility = .hidden
+            window.titlebarAppearsTransparent = true
+            window.standardWindowButton(.closeButton)?.isHidden = true
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            window.standardWindowButton(.zoomButton)?.isHidden = true
             window.delegate = self
         }
     }
-}
-
-extension AppDelegate: NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         ShowControl().hide()
         return false
