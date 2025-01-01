@@ -36,6 +36,7 @@ struct AppsListView: View {
         }
         .scrollContentBackground(.hidden)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .scrollIndicators(.never) // never bc if u connect a mouse it comes back
         .padding(.horizontal)
     }
 }
