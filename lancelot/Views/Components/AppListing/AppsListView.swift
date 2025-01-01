@@ -18,6 +18,10 @@ struct AppsListView: View {
             HStack {
                 IconView(imgPath: filteredApps[index].iconPath)
                 Text(filteredApps[index].name)
+                Text(filteredApps[index].path)
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.trailing)
             }
             .padding(.vertical, 4)
             .listRowBackground(
