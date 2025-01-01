@@ -36,5 +36,6 @@ struct AppsListView: View {
         }
         .scrollContentBackground(.hidden)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal)
     }
 }
