@@ -80,6 +80,12 @@ struct ContentView: View {
             }
             return .handled
         }
+        .onKeyPress(.escape) {
+            if !keybindManager.isRecordingKeybind {
+                showControl.hide()
+            }
+            return .handled
+        }
     }
     
     private func launchApp(_ app: AppModel) {

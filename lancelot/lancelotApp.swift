@@ -19,11 +19,6 @@ struct lancelotApp: App {
         WindowGroup {
             ContentView(savedPaths: $savedPaths)
                 .environmentObject(keybindManager)
-                .onEscape {
-                    if !keybindManager.isRecordingKeybind {
-                        showControl.hide()
-                    }
-                }
                 .onAppear {
                     if let window = NSApplication.shared.windows.first {
                         window.titleVisibility = .hidden
