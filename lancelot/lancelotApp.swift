@@ -29,5 +29,22 @@ struct lancelotApp: App {
         Settings {
             PreferencePaneView()
         }
+        
+        /// Menu Bar
+        MenuBarExtra("Lancelot", systemImage: "figure.fencing") {
+            Button("Show Lancelot") {
+                NSApplication.shared.unhide(nil)
+            }
+            .keyboardShortcut("D")
+            Divider()
+            Button("Settings") {
+                print("show settings")
+            }
+            .keyboardShortcut(",")
+            Divider()
+            Button("Quit") {
+                NSApplication.shared.terminate(nil)
+            }
+        }
     }
 }
