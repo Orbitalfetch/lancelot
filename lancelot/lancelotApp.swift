@@ -18,6 +18,12 @@ struct lancelotApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(savedPaths: $savedPaths)
+                .onKeyPress(.escape) {
+                    if !keybindManager.isRecordingKeybind {
+                        showControl.hide()
+                    }
+                    return .handled
+                }
                 .environmentObject(keybindManager)
         }
         .windowStyle(.hiddenTitleBar)
