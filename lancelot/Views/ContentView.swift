@@ -8,18 +8,6 @@
 import SwiftUI
 import AppKit
 
-struct BlurryEffect: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSVisualEffectView {
-        let effectView = NSVisualEffectView()
-        effectView.state = .active
-        effectView.blendingMode = .behindWindow
-        effectView.material = .sidebar
-        return effectView
-    }
-
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
-}
-
 struct ContentView: View {
     @State private var searchText = ""
     @State private var allApps: [AppModel] = []
@@ -39,50 +27,20 @@ struct ContentView: View {
                 .ignoresSafeArea()
 
             VStack {
-                TextField("Search for apps...", text: $searchText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
-                    .focused($isSearchFieldFocused)
-                    .onChange(of: searchText) {
-                        filterApps(searchText)
-                        selectedIndex = 0
+                SearchBarView(searchText: $searchText, isSearchFieldFocused: $isSearchFieldFocused, onFilter: { query in
+                    filterApps(query)
+                    selectedIndex = 0
+                }, onSubmit: {
+                    if !filteredApps.isEmpty {
+                        launchApp(filteredApps[selectedIndex])
                     }
-                    .onSubmit {
-                        if !filteredApps.isEmpty {
-                            launchApp(filteredApps[selectedIndex])
-                        }
-                    }
-                
+                })
                 if filteredApps.isEmpty {
-                    Spacer()
-                    Image(systemName: "app.dashed")
-                        .foregroundStyle(.secondary)
-                        .font(.system(size: 48))
-                        .padding(.bottom, 8)
-                    Text("No apps found.")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.primary)
-                    Spacer()
+                    AppEmptyStateView()
                 } else {
-                    List(filteredApps.indices, id: \.self) { index in
-                        HStack {
-                            IconView(imgPath: filteredApps[index].iconPath)
-                            Text(filteredApps[index].name)
-                        }
-                        .padding(.vertical, 4)
-                        .listRowBackground(
-                            RoundedRectangle(cornerRadius: 6)
-                                .fill(index == selectedIndex ? Color.accentColor.opacity(0.3) : Color.clear)
-                                .padding(.horizontal, 4)
-                        )
-                        .onTapGesture {
-                            selectedIndex = index
-                            launchApp(filteredApps[index])
-                        }
-                    }
-                    .scrollContentBackground(.hidden)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    AppsListView(filteredApps: $filteredApps, iconLoader: iconLoader, selectedIndex: $selectedIndex, onAppSelected: { app in
+                        launchApp(app)
+                    })
                 }
             }
             .padding()
