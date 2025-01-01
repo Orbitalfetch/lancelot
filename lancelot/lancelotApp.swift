@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct lancelotApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var keybindManager = KeybindManager()
     let showControl = ShowControl()
     var body: some Scene {
@@ -52,5 +53,21 @@ struct lancelotApp: App {
                 NSApplication.shared.terminate(nil)
             }
         }
+    }
+}
+
+// MARK: The only way I found..
+class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        if let window = NSApplication.shared.windows.first {
+            window.delegate = self
+        }
+    }
+}
+
+extension AppDelegate: NSWindowDelegate {
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        ShowControl().hide()
+        return false
     }
 }
