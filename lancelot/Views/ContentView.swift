@@ -63,7 +63,7 @@ struct ContentView: View {
         }
         .onAppear {
             loadApplications()
-            loadLaunchCounts()
+            launchCountsManager.loadLaunchCounts()
             isSearchFieldFocused = true
         }
         .frame(minWidth: 400, minHeight: 400)
@@ -113,13 +113,6 @@ struct ContentView: View {
             }
         } catch {
             print("Error loading applications: \(error)")
-        }
-    }
-
-    private func loadLaunchCounts() {
-        launchCountsManager.loadLaunchCounts()
-        filteredApps = allApps.sorted {
-            launchCountsManager.appLaunchCounts[$0.name, default: 0] > launchCountsManager.appLaunchCounts[$1.name, default: 0]
         }
     }
 
