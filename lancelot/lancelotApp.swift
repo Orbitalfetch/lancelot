@@ -11,7 +11,7 @@ import SwiftUI
 struct lancelotApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var keybindManager = KeybindManager()
-    @State var showPaths: Bool = false
+    @AppStorage("showPaths") var showPaths: Bool = false
     @AppStorage("savedPaths") private var savedPaths: String = "[\"/Applications\", \"/System/Applications\", \"/System/Library/CoreServices/Applications\", ]"
     static var hideWindow = false
 
