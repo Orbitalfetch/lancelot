@@ -16,6 +16,7 @@ struct lancelotApp: App {
     let showControl = ShowControl()
 
     init() {
+        handleCommandLineArguments()
         let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: "tech.orbitalfetch.lancelot")
         let currentApp = NSRunningApplication.current
         for app in runningApps {
@@ -54,6 +55,16 @@ struct lancelotApp: App {
             Divider()
             Button("Quit") {
                 appDelegate.internalTerminate()
+            }
+        }
+    }
+    private func handleCommandLineArguments() {
+        let arguments = CommandLine.arguments
+        if arguments.count > 1 {
+            for arg in arguments[1...] {
+                if arg == "--startupLaunch" {
+                    print("idk")
+                }
             }
         }
     }

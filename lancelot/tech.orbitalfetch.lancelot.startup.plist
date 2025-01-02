@@ -12,6 +12,7 @@
 	<key>ProgramArguments</key>
 	<array>
 		<string>/Applications/Lancelot.app/Contents/MacOS/Lancelot</string>
+		<string>--startupLaunch</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>
