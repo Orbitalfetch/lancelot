@@ -22,6 +22,7 @@ class ShowControl {
         NSApp.activate(ignoringOtherApps: true)
         if let window = NSApplication.shared.windows.first {
             window.makeKeyAndOrderFront(nil)
+            window.level = .floating
         }
     }
 }

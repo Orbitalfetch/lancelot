@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             window.standardWindowButton(.miniaturizeButton)?.isHidden = true
             window.standardWindowButton(.zoomButton)?.isHidden = true
             window.delegate = self
+            window.level = .floating
         }
     }
     

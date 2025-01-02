@@ -34,6 +34,11 @@ struct lancelotApp: App {
         Settings {
             PreferencePaneView(savedPaths: $savedPaths)
                 .environmentObject(keybindManager)
+                .onAppear {
+                    if let settingsWindow = NSApplication.shared.windows.last {
+                        settingsWindow.level = .modalPanel
+                    }
+                }
         }
         
         /// Menu Bar
