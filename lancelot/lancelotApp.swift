@@ -11,6 +11,7 @@ import SwiftUI
 struct lancelotApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var keybindManager = KeybindManager()
+    @State var showPaths: Bool = false
     @AppStorage("savedPaths") private var savedPaths: String = "[\"/Applications\", \"/System/Applications\", \"/System/Library/CoreServices/Applications\", ]"
     static var hideWindow = false
 
@@ -29,12 +30,12 @@ struct lancelotApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(savedPaths: $savedPaths)
+            ContentView(savedPaths: $savedPaths, showPaths: $showPaths)
                 .environmentObject(keybindManager)
         }
         .windowStyle(.hiddenTitleBar)
         Settings {
-            PreferencePaneView(savedPaths: $savedPaths)
+            PreferencePaneView(savedPaths: $savedPaths, showPaths: $showPaths)
                 .environmentObject(keybindManager)
                 .onAppear {
                     if let settingsWindow = NSApplication.shared.windows.last {

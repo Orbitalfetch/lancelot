@@ -8,9 +8,10 @@
 import SwiftUI
 struct PreferencePaneView: View {
     @Binding var savedPaths: String
+    @Binding var showPaths: Bool
     var body: some View {
         TabView {
-            GeneralSettingsView(savedPaths: $savedPaths)
+            GeneralSettingsView(savedPaths: $savedPaths, showPaths: $showPaths)
                 .tabItem {
                     Label("General", systemImage: "gearshape")
                 }

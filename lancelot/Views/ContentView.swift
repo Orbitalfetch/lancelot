@@ -23,6 +23,7 @@ struct ContentView: View {
     @State private var iconLoader = Iconloader()
     
     @Binding var savedPaths: String
+    @Binding var showPaths: Bool
     
     var body: some View {
         ZStack {
@@ -43,7 +44,7 @@ struct ContentView: View {
                 } else {
                     AppsListView(filteredApps: $filteredApps, iconLoader: iconLoader, selectedIndex: $selectedIndex, onAppSelected: { app in
                         launchApp(app)
-                    })
+                    }, showPaths: $showPaths)
                     .padding(.top, 5)
                 }
             }

@@ -251,6 +251,9 @@
         }
       }
     },
+    "Show paths next to apps" : {
+
+    },
     "This will permanently delete all launch count data" : {
       "localizations" : {
         "fr" : {

@@ -12,6 +12,7 @@ struct AppsListView: View {
     let iconLoader: Iconloader
     @Binding var selectedIndex: Int
     let onAppSelected: (AppModel) -> Void
+    @Binding var showPaths: Bool
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -19,10 +20,12 @@ struct AppsListView: View {
                 HStack {
                     IconView(icon: filteredApps[index].icon)
                     Text(filteredApps[index].name)
-                    Text(filteredApps[index].path)
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.trailing)
+                    if(showPaths) {
+                        Text(filteredApps[index].path)
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
                 .padding(.vertical, 4)
                 .listRowBackground(
