@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import ServiceManagement
 
 struct LaunchAtLoginToggle: View {
-    @Binding var isEnabled: Bool
+    @State private var isEnabled: Bool = false
     @Binding var showAlert: Bool
     @Binding var alertMessage: String
     
@@ -18,19 +17,51 @@ struct LaunchAtLoginToggle: View {
             .onChange(of: isEnabled) {
                 toggleLaunchAtLogin(enabled: isEnabled)
             }
+            .onAppear {
+                let fileManager = FileManager()
+                let libPath = fileManager.homeDirectoryForCurrentUser.path + "/Library/LaunchAgents/"
+                let destinationPath = libPath + "tech.orbitalfetch.lancelot.startup.plist"
+                if fileManager.fileExists(atPath: destinationPath) {
+                    isEnabled = true
+                }
+                else {
+                    isEnabled = false
+                }
+            }
     }
     private func toggleLaunchAtLogin(enabled: Bool) {
-        do {
-            if enabled {
-                print("register!")
-                try SMAppService.mainApp.register()
-            } else {
-                print("unregister!")
-                try SMAppService.mainApp.unregister()
+        let fileManager = FileManager.default
+        guard let launchAgentPath = Bundle.main.path(forResource: "tech.orbitalfetch.lancelot.startup", ofType: "plist") else {
+            print("LaunchAgent plist not found in bundle")
+            return
+        }
+        
+        let libPath = fileManager.homeDirectoryForCurrentUser.path + "/Library/LaunchAgents/"
+        let destinationPath = libPath + "tech.orbitalfetch.lancelot.startup.plist"
+        if isEnabled {
+            do {
+                if !fileManager.fileExists(atPath: libPath) {
+                    try fileManager.createDirectory(atPath: libPath, withIntermediateDirectories: true, attributes: nil)
+                }
+                
+                if fileManager.fileExists(atPath: destinationPath) {
+                    try fileManager.removeItem(atPath: destinationPath)
+                }
+                
+                try fileManager.copyItem(atPath: launchAgentPath, toPath: destinationPath)
+            } catch {
+                print(error)
             }
-        } catch {
-            alertMessage = "Failed to update login settings: \(error.localizedDescription)"
-            showAlert = true
+        }
+        else {
+            do {
+                if fileManager.fileExists(atPath: destinationPath) {
+                    try fileManager.removeItem(atPath: destinationPath)
+                }
+            }
+            catch {
+                print(error)
+            }
         }
     }
 }

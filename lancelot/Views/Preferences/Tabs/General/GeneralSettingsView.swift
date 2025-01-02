@@ -6,10 +6,8 @@
 //
 
 import SwiftUI
-import ServiceManagement
 
 struct GeneralSettingsView: View {
-    @State private var isLaunchAtLoginEnabled = SMAppService.mainApp.status == .enabled ? true : false
     @State private var showAlert = false
     @State private var alertMessage = ""
     @Binding var savedPaths: String
@@ -18,7 +16,7 @@ struct GeneralSettingsView: View {
     var body: some View {
         Form {
             Section(header: Text("Application").font(.title)) {
-                LaunchAtLoginToggle(isEnabled: $isLaunchAtLoginEnabled, showAlert: $showAlert, alertMessage: $alertMessage)
+                LaunchAtLoginToggle(showAlert: $showAlert, alertMessage: $alertMessage)
                 Divider()
                 KeyboardShortcutSection()
                 DataManagementSection(savedPaths: $savedPaths)
