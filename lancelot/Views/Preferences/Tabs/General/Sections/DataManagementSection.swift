@@ -31,7 +31,7 @@ struct DataManagementButtons: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Button(action: {
-                savedPaths = "[\"/Applications\"]"
+                savedPaths = "[\"/Applications\", \"/System/Applications\", \"/System/Library/CoreServices/Applications\", ]"
                 alertMessage = "Paths have been reset to default"
                 showAlert = true
             }) {

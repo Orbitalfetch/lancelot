@@ -11,7 +11,7 @@ import SwiftUI
 struct lancelotApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var keybindManager = KeybindManager()
-    @AppStorage("savedPaths") private var savedPaths: String = "[\"/Applications\"]"
+    @AppStorage("savedPaths") private var savedPaths: String = "[\"/Applications\", \"/System/Applications\", \"/System/Library/CoreServices/Applications\", ]"
 
     let showControl = ShowControl()
 
@@ -63,7 +63,7 @@ struct lancelotApp: App {
         if arguments.count > 1 {
             for arg in arguments[1...] {
                 if arg == "--startupLaunch" {
-                    print("idk")
+                    print("maybe hide ContentView in the future.")
                 }
             }
         }
