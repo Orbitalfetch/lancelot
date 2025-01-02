@@ -12,6 +12,7 @@ struct lancelotApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var keybindManager = KeybindManager()
     @AppStorage("savedPaths") private var savedPaths: String = "[\"/Applications\", \"/System/Applications\", \"/System/Library/CoreServices/Applications\", ]"
+    static var hideWindow = false
 
     let showControl = ShowControl()
 
@@ -64,6 +65,8 @@ struct lancelotApp: App {
             for arg in arguments[1...] {
                 if arg == "--startupLaunch" {
                     print("maybe hide ContentView in the future.")
+                    print("inplementing...")
+                    lancelotApp.hideWindow = true
                 }
             }
         }

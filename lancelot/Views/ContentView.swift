@@ -52,12 +52,16 @@ struct ContentView: View {
         }
         .frame(minWidth: 500, minHeight: 140)
         .onAppear {
-            showControl.firstPlan()
+            if(!lancelotApp.hideWindow) {
+                showControl.firstPlan()
+            }
+
             setupHotkey()
             loadApplications()
             launchCountsManager.loadLaunchCounts()
             filterApps(searchText)
             isSearchFieldFocused = true
+            showControl.hide()
         }
         .onChange(of: keybindManager.currentKey) {
             setupHotkey()
