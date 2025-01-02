@@ -29,6 +29,7 @@ struct LaunchAtLoginToggle: View {
                 }
             }
     }
+    
     private func toggleLaunchAtLogin(enabled: Bool) {
         let fileManager = FileManager.default
         guard let launchAgentPath = Bundle.main.path(forResource: "tech.orbitalfetch.lancelot.startup", ofType: "plist") else {
@@ -48,7 +49,20 @@ struct LaunchAtLoginToggle: View {
                     try fileManager.removeItem(atPath: destinationPath)
                 }
                 
-                try fileManager.copyItem(atPath: launchAgentPath, toPath: destinationPath)
+                guard let plistData = try? Data(contentsOf: URL(fileURLWithPath: launchAgentPath)),
+                      var plistContent = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any],
+                      var programArgs = plistContent["ProgramArguments"] as? [String] else {
+                    print("Failed to read plist content")
+                    return
+                }
+                
+                if let execPath = Bundle.main.executablePath {
+                    programArgs[0] = execPath
+                    plistContent["ProgramArguments"] = programArgs
+                    
+                    let modifiedData = try PropertyListSerialization.data(fromPropertyList: plistContent, format: .xml, options: 0)
+                    try modifiedData.write(to: URL(fileURLWithPath: destinationPath))
+                }
             } catch {
                 print(error)
             }

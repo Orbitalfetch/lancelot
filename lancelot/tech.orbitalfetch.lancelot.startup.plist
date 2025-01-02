@@ -5,7 +5,7 @@
 	<key>KeepAlive</key>
 	<dict>
 		<key>SuccessfulExit</key>
-		<true/>
+		<false/>
 	</dict>
 	<key>Label</key>
 	<string>tech.orbitalfetch.lancelot.startup</string>
