@@ -64,8 +64,6 @@ struct lancelotApp: App {
         if arguments.count > 1 {
             for arg in arguments[1...] {
                 if arg == "--startupLaunch" {
-                    print("maybe hide ContentView in the future.")
-                    print("inplementing...")
                     lancelotApp.hideWindow = true
                 }
             }
