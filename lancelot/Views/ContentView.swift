@@ -99,9 +99,8 @@ struct ContentView: View {
         // Update the launch count for the app
         launchCountsManager.incrementLaunchCount(for: app.name)
 
-        let path = "/zsh"
         let configuration = NSWorkspace.OpenConfiguration()
-        configuration.arguments = [path]
+        configuration.arguments = []
         NSWorkspace.shared.openApplication(at: url,
                                            configuration: configuration,
                                            completionHandler: nil)
