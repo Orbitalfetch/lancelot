@@ -12,6 +12,9 @@ class ShowControl {
         NSApplication.shared.hide(nil)
     }
     func unhide() {
+        if let window = NSApplication.shared.windows.first {
+            window.collectionBehavior = [.moveToActiveSpace]
+        }
         NSApplication.shared.unhide(nil)
         firstPlan()
     }
