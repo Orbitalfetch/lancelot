@@ -46,7 +46,6 @@ struct lancelotApp: App {
             Button("Show Lancelot") {
                 showControl.unhide()
             }
-            .keyboardShortcut("D")
             Divider()
             SettingsLink {
                 Text("Settings")
