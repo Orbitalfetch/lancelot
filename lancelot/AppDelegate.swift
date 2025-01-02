@@ -21,6 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             window.delegate = self
             window.level = .floating
         }
+        restoreBookmarkedFolders()
     }
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
@@ -43,5 +44,37 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func internalTerminate() {
         isProgrammaticTermination = true
         NSApplication.shared.terminate(nil)
+    }
+    
+    func restoreBookmarkedFolders() {
+        let defaults = UserDefaults.standard
+        let bookmarkKeys = defaults.dictionaryRepresentation().keys.filter { $0.starts(with: "FolderBookmark-") }
+        
+        for key in bookmarkKeys {
+            if let bookmarkData = defaults.data(forKey: key) {
+                do {
+                    var isStale = false
+                    let url = try URL(
+                        resolvingBookmarkData: bookmarkData,
+                        options: .withSecurityScope,
+                        relativeTo: nil,
+                        bookmarkDataIsStale: &isStale
+                    )
+                    
+                    if isStale {
+                        let newBookmarkData = try url.bookmarkData(
+                            options: .withSecurityScope,
+                            includingResourceValuesForKeys: nil,
+                            relativeTo: nil
+                        )
+                        defaults.set(newBookmarkData, forKey: key)
+                    }
+                    
+                    _ = url.startAccessingSecurityScopedResource()
+                } catch {
+                    print("failed to resolve bookmark:", error)
+                }
+            }
+        }
     }
 }

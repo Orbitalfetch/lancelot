@@ -31,6 +31,16 @@
         }
       }
     },
+    "Browse..." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir…"
+          }
+        }
+      }
+    },
     "Clear Launch History" : {
       "localizations" : {
         "fr" : {
