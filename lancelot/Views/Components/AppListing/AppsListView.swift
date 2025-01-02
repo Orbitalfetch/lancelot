@@ -17,7 +17,7 @@ struct AppsListView: View {
         ScrollViewReader { proxy in
             List(filteredApps.indices, id: \.self) { index in
                 HStack {
-                    IconView(imgPath: filteredApps[index].iconPath)
+                    IconView(icon: filteredApps[index].icon)
                     Text(filteredApps[index].name)
                     Text(filteredApps[index].path)
                         .font(.footnote)

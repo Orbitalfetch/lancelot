@@ -141,7 +141,7 @@ struct ContentView: View {
                     .filter { $0.hasSuffix(".app") }
                     .map { appName in
                         let fullPath = (applicationPath as NSString).appendingPathComponent(appName)
-                        return AppModel(name: (appName as NSString).deletingPathExtension, path: fullPath, iconPath: iconLoader.getIcnsPath(fullPath))
+                        return AppModel(name: (appName as NSString).deletingPathExtension, path: fullPath, icon: iconLoader.getIconNew(fullPath))
                     }
             } catch {
                 print("Error loading applications: \(error)")
