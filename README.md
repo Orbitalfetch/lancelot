@@ -20,7 +20,9 @@ Contributions are greatly appraciated ! Open a Pull Request with a nice descript
 - [x] Sorting by times launched
 - [x] Start on Launch
 - [x] Respond to a specific Hot Key globally
-- [ ] Custom Hot Key
+- [x] Custom Hot Key
+- [ ] Shortcuts support
+- [ ] Custom hotkey for individual app/shortcut
 - [ ] Clipboard History
 
 ## Credits
