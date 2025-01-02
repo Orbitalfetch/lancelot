@@ -22,8 +22,10 @@ struct LaunchAtLoginToggle: View {
     private func toggleLaunchAtLogin(enabled: Bool) {
         do {
             if enabled {
+                print("register!")
                 try SMAppService.mainApp.register()
             } else {
+                print("unregister!")
                 try SMAppService.mainApp.unregister()
             }
         } catch {

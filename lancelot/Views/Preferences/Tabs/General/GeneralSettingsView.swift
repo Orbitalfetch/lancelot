@@ -9,7 +9,7 @@ import SwiftUI
 import ServiceManagement
 
 struct GeneralSettingsView: View {
-    @State private var isLaunchAtLoginEnabled = false
+    @State private var isLaunchAtLoginEnabled = SMAppService.mainApp.status == .enabled ? true : false
     @State private var showAlert = false
     @State private var alertMessage = ""
     @Binding var savedPaths: String
@@ -30,11 +30,6 @@ struct GeneralSettingsView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(alertMessage)
-        }
-        .onAppear {
-            if SMAppService.mainApp.status == .enabled  {
-                isLaunchAtLoginEnabled = true
-            }
         }
     }
 }
