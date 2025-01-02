@@ -31,5 +31,10 @@ struct GeneralSettingsView: View {
         } message: {
             Text(alertMessage)
         }
+        .onAppear {
+            if SMAppService.mainApp.status == .enabled  {
+                isLaunchAtLoginEnabled = true
+            }
+        }
     }
 }
