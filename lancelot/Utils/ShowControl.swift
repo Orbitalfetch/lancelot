@@ -23,6 +23,17 @@ class ShowControl {
         if let window = NSApplication.shared.windows.first {
             window.makeKeyAndOrderFront(nil)
             window.level = .floating
+            
+            if let screenFrame = window.screen?.frame {
+                let windowSize = window.frame.size
+                
+                let centerX = screenFrame.midX - (windowSize.width / 2)
+                let centerY = screenFrame.midY - (windowSize.height / 2)
+                
+                let windowPosition = NSPoint(x: centerX, y: centerY)
+                
+                window.setFrameOrigin(windowPosition)
+            }
         }
     }
 }
