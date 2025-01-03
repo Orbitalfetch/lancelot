@@ -64,8 +64,16 @@ struct lancelotApp: App {
         let arguments = CommandLine.arguments
         if arguments.count > 1 {
             for arg in arguments[1...] {
-                if arg == "--startupLaunch" {
+                switch arg {
+                case "--startupLaunch":
                     lancelotApp.hideWindow = true
+                    break
+                case "--version":
+                    print("v1.0")
+                    break
+                default:
+                    print("unrecognized launch option: \(arg)")
+                    appDelegate.internalTerminate()
                 }
             }
         }
