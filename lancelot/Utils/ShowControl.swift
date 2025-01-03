@@ -23,6 +23,7 @@ class ShowControl {
         if let window = NSApplication.shared.windows.first {
             window.makeKeyAndOrderFront(nil)
             window.level = .floating
+            window.styleMask.remove(.resizable)
             
             if let screenFrame = window.screen?.frame {
                 let windowSize = window.frame.size
