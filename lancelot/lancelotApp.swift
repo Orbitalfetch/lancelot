@@ -69,7 +69,7 @@ struct lancelotApp: App {
                     lancelotApp.hideWindow = true
                     break
                 case "--version":
-                    print("Lancelot v1.0")
+                    print("Lancelot v1.1")
                     break
                 default:
                     print("unrecognized launch option: \(arg)")
