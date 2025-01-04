@@ -12,9 +12,9 @@ struct KeepInMiddle: View {
     
     var body: some View {
         Toggle("Keep in the middle", isOn: $keepMiddle)
-            .onChange(of: keepMiddle) { newValue in
+            .onChange(of: keepMiddle) {
                 // Update UserDefaults when the toggle changes
-                UserDefaults.standard.set(newValue, forKey: "keepMiddle")
+                UserDefaults.standard.set(keepMiddle, forKey: "keepMiddle")
             }
     }
 }
