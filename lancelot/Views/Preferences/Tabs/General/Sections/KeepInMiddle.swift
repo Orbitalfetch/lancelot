@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct KeepInMiddle: View {
-    @State var keepMiddle: Bool = lancelotApp.keepMiddle
+    @State var keepMiddle: Bool = UserDefaults.standard.bool(forKey: "keepMiddle") // Retrieve initial value
+    
     var body: some View {
         Toggle("Keep in the middle", isOn: $keepMiddle)
-            .onChange(of: keepMiddle) {
-                lancelotApp.keepMiddle = !lancelotApp.keepMiddle
-                print("lApp: \(lancelotApp.keepMiddle), toggle: \(keepMiddle)")
+            .onChange(of: keepMiddle) { newValue in
+                // Update UserDefaults when the toggle changes
+                UserDefaults.standard.set(newValue, forKey: "keepMiddle")
             }
     }
 }

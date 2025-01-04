@@ -13,8 +13,15 @@ struct lancelotApp: App {
     @StateObject var keybindManager = KeybindManager()
     @AppStorage("showPaths") var showPaths: Bool = false
     @AppStorage("savedPaths") private var savedPaths: String = "[\"/Applications\", \"/System/Applications\", \"/System/Library/CoreServices/Applications\", ]"
-    static var keepMiddle = true
     static var hideWindow = false
+    
+    static var keepMiddle: Bool {
+        if let value = UserDefaults.standard.value(forKey: "keepMiddle") as? Bool {
+            return value
+        } else {
+            return true
+        }
+    }
 
     let showControl = ShowControl()
 
