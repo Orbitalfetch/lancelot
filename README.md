@@ -3,6 +3,12 @@
 # Lancelot
 A native, intuitive app launcher for macOS, written in SwiftUI.
 
+## Installing
+```zsh
+brew tap orbitalfetch/tap
+brew install lancelot
+```
+
 ## Building
 ### Prerequisites
 - A Mac with Xcode 16 installed
