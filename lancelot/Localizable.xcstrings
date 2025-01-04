@@ -101,6 +101,16 @@
         }
       }
     },
+    "Keep in the middle" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garder au milieu"
+          }
+        }
+      }
+    },
     "Keyboard Shortcuts" : {
       "localizations" : {
         "fr" : {
@@ -252,7 +262,14 @@
       }
     },
     "Show paths next to apps" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les emplacements des apps"
+          }
+        }
+      }
     },
     "This will permanently delete all launch count data" : {
       "localizations" : {

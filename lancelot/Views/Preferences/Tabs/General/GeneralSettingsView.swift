@@ -19,6 +19,7 @@ struct GeneralSettingsView: View {
             Section(header: Text("Application").font(.title)) {
                 LaunchAtLoginToggle(showAlert: $showAlert, alertMessage: $alertMessage)
                 ShowPathsInList(showPaths: $showPaths)
+                KeepInMiddle()
                 Divider()
                 KeyboardShortcutSection()
                 DataManagementSection(savedPaths: $savedPaths)

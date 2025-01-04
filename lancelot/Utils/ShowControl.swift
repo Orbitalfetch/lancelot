@@ -25,15 +25,17 @@ class ShowControl {
             window.level = .floating
             window.styleMask.remove(.resizable)
             
-            if let screenFrame = window.screen?.frame {
-                let windowSize = window.frame.size
-                
-                let centerX = screenFrame.midX - (windowSize.width / 2)
-                let centerY = screenFrame.midY - (windowSize.height / 2)
-                
-                let windowPosition = NSPoint(x: centerX, y: centerY)
-                
-                window.setFrameOrigin(windowPosition)
+            if lancelotApp.keepMiddle {
+                if let screenFrame = window.screen?.frame {
+                    let windowSize = window.frame.size
+                    
+                    let centerX = screenFrame.midX - (windowSize.width / 2)
+                    let centerY = screenFrame.midY - (windowSize.height / 2)
+                    
+                    let windowPosition = NSPoint(x: centerX, y: centerY)
+                    
+                    window.setFrameOrigin(windowPosition)
+                }
             }
         }
     }
