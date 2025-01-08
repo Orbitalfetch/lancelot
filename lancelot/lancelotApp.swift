@@ -79,8 +79,11 @@ struct lancelotApp: App {
                 case "--version":
                     print("Lancelot v1.1")
                     break
+                case "-NSDocumentRevisionsDebugMode":
+                    print("Note: The app is being launched as debug.")
+                    break
                 default:
-                    print("unrecognized launch option: \(arg)")
+                    continue
                 }
             }
         }
