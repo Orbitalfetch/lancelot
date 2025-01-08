@@ -35,11 +35,27 @@ struct ContentView: View {
                     filterApps(query)
                     selectedIndex = 0
                 }, onSubmit: {
-                    if !filteredApps.isEmpty {
+                    if searchText.hasPrefix("@google") {
+                        let query = searchText.dropFirst(8).trimmingCharacters(in: .whitespaces)
+                        guard let url = URL(string: "https://www.google.com/search?q=\(query)") else { return }
+                        NSWorkspace.shared.open(url)
+                    }
+                    else if !filteredApps.isEmpty {
                         launchApp(filteredApps[selectedIndex])
                     }
                 })
-                if filteredApps.isEmpty {
+                if searchText.hasPrefix("@google") {
+                    Spacer()
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.secondary)
+                        .font(.system(size: 48))
+                        .padding(.bottom, 8)
+                    Text("Search \"\(searchText.dropFirst(8).trimmingCharacters(in: .whitespaces))\" on Google...")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    Spacer()
+                } else if filteredApps.isEmpty {
                     AppEmptyStateView()
                 } else {
                     AppsListView(filteredApps: $filteredApps, iconLoader: iconLoader, selectedIndex: $selectedIndex, onAppSelected: { app in

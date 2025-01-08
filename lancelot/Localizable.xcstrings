@@ -231,6 +231,16 @@
         }
       }
     },
+    "Search \"%@\" on Google..." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher « %@ » sur Google…"
+          }
+        }
+      }
+    },
     "Search for apps..." : {
       "localizations" : {
         "fr" : {
