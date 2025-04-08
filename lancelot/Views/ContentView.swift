@@ -47,7 +47,19 @@ struct ContentView: View {
                 if searchText.hasPrefix("@google") {
                     Spacer()
                     Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(
+                            .linearGradient(
+                                colors: [
+                                    Color(red: 219/255, green: 68/255, blue: 55/255),
+                                    Color(red: 219/255, green: 68/255, blue: 55/255),
+                                    Color(red: 244/255, green: 180/255, blue: 0/255),
+                                    Color(red: 66/255, green: 133/255, blue: 244/255),
+                                    Color(red: 15/255, green: 157/255, blue: 88/255)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
                         .font(.system(size: 48))
                         .padding(.bottom, 8)
                     Text("Search \"\(searchText.dropFirst(8).trimmingCharacters(in: .whitespaces))\" on Google...")
